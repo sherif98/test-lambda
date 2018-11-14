@@ -1,5 +1,6 @@
 package com.aws.codestar.projecttemplates.handler;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
@@ -9,6 +10,7 @@ public class User {
     @DynamoDBHashKey
     private String id;
 
+    @DynamoDBAttribute
     private String name;
 
     public String getId() {
