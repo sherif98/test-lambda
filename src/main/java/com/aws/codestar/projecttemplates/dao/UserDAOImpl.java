@@ -6,7 +6,6 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTableMapper;
 import com.aws.codestar.projecttemplates.dto.User;
 import org.springframework.stereotype.Repository;
 
-@Repository
 public class UserDAOImpl implements UserDAO {
 
     private DynamoDBTableMapper<User, String, ?> userMapper;
