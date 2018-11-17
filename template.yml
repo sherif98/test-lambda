@@ -85,13 +85,15 @@ Resources:
           Action: sts:AssumeRole
       Path: '/'
       Policies:
+      -
+        PolicyName: lambda-policy
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
           -
             Effect: Allow
             Action:
-            - 'kinesis:GetRecords'
-            - 'kinesis:GetShardIterator'
-            - 'kinesis:DescribeStream'
-            - 'kinesis:ListStreams'
+            - 'kinesis:*'
             Resource: '*'
 
   KinesisStreamReaderLambda:
