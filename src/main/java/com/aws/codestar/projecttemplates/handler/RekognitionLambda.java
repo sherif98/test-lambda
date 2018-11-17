@@ -47,6 +47,9 @@ public class RekognitionLambda {
                 case "describe":
                     sm.describeStreamProcessor();
                     break;
+                case "delete":
+                    sm.deleteStreamProcessor();
+                    break;
                 default:
                     throw new IllegalArgumentException("unknown operation");
             }
