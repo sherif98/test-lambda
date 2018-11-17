@@ -1,13 +1,15 @@
 package com.aws.codestar.projecttemplates.handler;
 
+import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.rekognition.AmazonRekognition;
 import com.amazonaws.services.rekognition.AmazonRekognitionClientBuilder;
 import com.amazonaws.services.rekognition.model.*;
 
 public class RekognitionLambda {
 
-    public void handle(Operation operation) {
-
+    public void handle(Operation operation, Context context) {
+        System.out.println("function is called");
 
         String streamProcessorName = "TestStreamProcessor";
         String kinesisVideoStreamArn = "arn:aws:kinesisvideo:us-east-1:577962240200:stream/test/1542394943520";
@@ -16,6 +18,9 @@ public class RekognitionLambda {
         String collectionId = "MyCollection";
         Float matchThreshold = 50F;
 
+        LambdaLogger logger = context.getLogger();
+        logger.log("operation is" + operation.value);
+        logger.log("creating stream manager");
         try {
             StreamManager sm = new StreamManager(streamProcessorName,
                     kinesisVideoStreamArn,
@@ -23,6 +28,8 @@ public class RekognitionLambda {
                     roleArn,
                     collectionId,
                     matchThreshold);
+
+            logger.log("created stream manager");
 
             switch (operation.value) {
                 case "create":
