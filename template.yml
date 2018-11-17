@@ -72,29 +72,29 @@ Resources:
 
 
 
-  KinesisStreamReaderLambdaRole:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-        -
-          Effect: Allow
-          Principal:
-            Service: lambda.amazonaws.com
-          Action: sts:AssumeRole
-      Path: '/'
-      Policies:
-      -
-        PolicyName: lambda-policy
-        PolicyDocument:
-          Version: '2012-10-17'
-          Statement:
-          -
-            Effect: Allow
-            Action:
-            - 'kinesis:*'
-            Resource: '*'
+#  KinesisStreamReaderLambdaRole:
+#    Type: AWS::IAM::Role
+#    Properties:
+#      AssumeRolePolicyDocument:
+#        Version: '2012-10-17'
+#        Statement:
+#        -
+#          Effect: Allow
+#          Principal:
+#            Service: lambda.amazonaws.com
+#          Action: sts:AssumeRole
+#      Path: '/'
+#      Policies:
+#      -
+#        PolicyName: lambda-policy
+#        PolicyDocument:
+#          Version: '2012-10-17'
+#          Statement:
+#          -
+#            Effect: Allow
+#            Action:
+#            - 'kinesis:*'
+#            Resource: '*'
 
   KinesisStreamReaderLambda:
     Type: AWS::Serverless::Function
@@ -103,7 +103,9 @@ Resources:
       Runtime: java8
       Timeout: 120
       MemorySize: 256
-      Role: !GetAtt  KinesisStreamReaderLambdaRole.Arn
+      Role:
+        Fn::ImportValue:
+          !Join ['-', [!Ref 'ProjectId', !Ref 'AWS::Region', 'LambdaTrustRole']]
 
 
   KinesisStreamReaderLambdaMapping:
@@ -116,39 +118,39 @@ Resources:
       StartingPosition: "TRIM_HORIZON"
 
 
-  RekognitionLambdaRole:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-        -
-          Effect: Allow
-          Principal:
-            Service: lambda.amazonaws.com
-          Action: sts:AssumeRole
-      Path: '/'
-      Policies:
-      -
-        PolicyName: lambda-comprehend-policy
-        PolicyDocument:
-          Version: '2012-10-17'
-          Statement:
-          -
-            Effect: Allow
-            Action:
-            - 'kinesis:*'
-            Resource: '*'
-          -
-            Effect: Allow
-            Action:
-            - 'kinesisvideo:*'
-            Resource: '*'
-          -
-            Effect: Allow
-            Action:
-            - 'rekognition:*'
-            Resource: '*'
+#  RekognitionLambdaRole:
+#    Type: AWS::IAM::Role
+#    Properties:
+#      AssumeRolePolicyDocument:
+#        Version: '2012-10-17'
+#        Statement:
+#        -
+#          Effect: Allow
+#          Principal:
+#            Service: lambda.amazonaws.com
+#          Action: sts:AssumeRole
+#      Path: '/'
+#      Policies:
+#      -
+#        PolicyName: lambda-comprehend-policy
+#        PolicyDocument:
+#          Version: '2012-10-17'
+#          Statement:
+#          -
+#            Effect: Allow
+#            Action:
+#            - 'kinesis:*'
+#            Resource: '*'
+#          -
+#            Effect: Allow
+#            Action:
+#            - 'kinesisvideo:*'
+#            Resource: '*'
+#          -
+#            Effect: Allow
+#            Action:
+#            - 'rekognition:*'
+#            Resource: '*'
 
 
   RekognitionLambda:
@@ -158,7 +160,9 @@ Resources:
       Runtime: java8
       Timeout: 120
       MemorySize: 256
-      Role: !GetAtt  RekognitionLambdaRole.Arn
+      Role:
+        Fn::ImportValue:
+          !Join ['-', [!Ref 'ProjectId', !Ref 'AWS::Region', 'LambdaTrustRole']]
 
   UserDynamoDBTable:
     Type: AWS::DynamoDB::Table
