@@ -34,6 +34,12 @@ public class RekognitionLambda {
                 case "stop":
                     sm.stopStreamProcessor();
                     break;
+                case "list":
+                    sm.listStreamProcessors();
+                    break;
+                case "describe":
+                    sm.describeStreamProcessor();
+                    break;
                 default:
                     throw new IllegalArgumentException("unknown operation");
             }
