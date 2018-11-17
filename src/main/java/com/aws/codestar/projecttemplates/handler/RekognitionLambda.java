@@ -19,7 +19,7 @@ public class RekognitionLambda {
         Float matchThreshold = 50F;
 
         LambdaLogger logger = context.getLogger();
-        logger.log("operation is" + operation.value);
+        logger.log("operation is" + operation.getValue());
         logger.log("creating stream manager");
         try {
             StreamManager sm = new StreamManager(streamProcessorName,
@@ -31,7 +31,7 @@ public class RekognitionLambda {
 
             logger.log("created stream manager");
 
-            switch (operation.value) {
+            switch (operation.getValue()) {
                 case "create":
                     sm.createStreamProcessor();
                     break;
@@ -186,5 +186,13 @@ class StreamManager {
 }
 
 class Operation {
-    String value;
+    private String value;
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
 }
