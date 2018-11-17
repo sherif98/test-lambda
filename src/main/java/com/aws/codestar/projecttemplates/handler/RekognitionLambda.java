@@ -14,7 +14,7 @@ public class RekognitionLambda {
         String streamProcessorName = "TestStreamProcessor";
         String kinesisVideoStreamArn = "arn:aws:kinesisvideo:us-east-1:577962240200:stream/test/1542394943520";
         String kinesisDataStreamArn = "arn:aws:kinesis:us-east-1:577962240200:stream/reko_result";
-        String roleArn = " arn:aws:iam::577962240200:policy/RekoPolicy ";
+        String roleArn = "arn:aws:iam::577962240200:role/reko-role";
         String collectionId = "MyCollection";
         Float matchThreshold = 50F;
 
