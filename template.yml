@@ -68,6 +68,96 @@ Resources:
           !Join ['-', [!Ref 'ProjectId', !Ref 'AWS::Region', 'LambdaTrustRole']]
 
 
+
+
+
+
+  KinesisStreamReaderLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        -
+          Effect: Allow
+          Principal:
+            Service: lambda.amazonaws.com
+          Action: sts:AssumeRole
+      Path: '/'
+      Policies:
+          -
+            Effect: Allow
+            Action:
+            - 'kinesis:GetRecords'
+            - 'kinesis:GetShardIterator'
+            - 'kinesis:DescribeStream'
+            - 'kinesis:ListStreams'
+            Resource: '*'
+
+  KinesisStreamReaderLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.aws.codestar.projecttemplates.handler.KinesisStreamReader::handle
+      Runtime: java8
+      Timeout: 120
+      MemorySize: 256
+      Role: !GetAtt  KinesisStreamReaderLambdaRole.Arn
+
+
+  KinesisStreamReaderLambdaMapping:
+    Type: "AWS::Lambda::EventSourceMapping"
+    Properties:
+      BatchSize: 10
+      Enabled: true
+      EventSourceArn: arn:aws:kinesis:us-east-1:577962240200:stream/reko_result
+      FunctionName: !GetAtt  KinesisStreamReaderLambda.Arn
+      StartingPosition: "TRIM_HORIZON"
+
+
+  RekognitionLambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        -
+          Effect: Allow
+          Principal:
+            Service: lambda.amazonaws.com
+          Action: sts:AssumeRole
+      Path: '/'
+      Policies:
+      -
+        PolicyName: lambda-comprehend-policy
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          -
+            Effect: Allow
+            Action:
+            - 'kinesis:*'
+            Resource: '*'
+          -
+            Effect: Allow
+            Action:
+            - 'kinesisvideo:*'
+            Resource: '*'
+          -
+            Effect: Allow
+            Action:
+            - 'rekognition:*'
+            Resource: '*'
+
+
+  RekognitionLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.aws.codestar.projecttemplates.handler.RekognitionLambda::handle
+      Runtime: java8
+      Timeout: 120
+      MemorySize: 256
+      Role: !GetAtt  RekognitionLambdaRole.Arn
+
   UserDynamoDBTable:
     Type: AWS::DynamoDB::Table
     Properties:
